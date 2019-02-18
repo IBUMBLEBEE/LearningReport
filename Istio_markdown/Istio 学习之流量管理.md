@@ -122,7 +122,7 @@ spec:
 
 #### 目标规则
 
-在请求被 VirtualService 路由之后，DestinationRule 配置的一系列策略就生效了。这些策略路由服务  属主编写， 包含断路器、负载均衡以及 TLS 等的配置内容。
+在请求被 VirtualService 路由之后，DestinationRule 配置的一系列策略就生效了。这些策略路由服务属主编写， 包含断路器、负载均衡以及 TLS 等的配置内容。
 
 DestinationRule 还定义了对应目标主机的可路由 subset。VirtualService 在向特定服务版本发送请求时会用到这些子集。
 
@@ -465,7 +465,7 @@ proxy-status 命令允许获取网格的概述并识别导致问题的代理。�
 proxy-status 命令允许获取网格的状态。如果怀疑其中一个 sidecar 没有收到配置或者不同步，那么代理状态会通知你。
 
 ```shell
-
+istioctl proxy-status
 ```
 
 如果此列表中缺少代理，则表示它当前未连接到 Pilot 实例，因此不会接受任何配置。
