@@ -14,7 +14,7 @@
 
 ```shell
 sudo yum -y install epel-release \
-            git wget unzip gcc gcc-c++ cmake3 \
+            git wget unzip gcc gcc-c++ cmake cmake3 \
             qt5-qtbase-devel \
             python python-devel python-pip \
             gtk2-devel \
@@ -60,6 +60,9 @@ ffmpeg -version
 ```shell
 pip3 install virtualenv virtualenvwrapper -i https://pypi.doubanio.com/simple/
 mkvirtualenv OpenCV-3.3.1-py2 -p python
+source ~/.bashrc
+
+# 下次进入的时候使用
 workon OpenCV-3.3.1-py2
 # 阿里云服务器默认选用阿里源，可取消 -i 参数
 pip install cmake -i https://pypi.doubanio.com/simple/
@@ -72,6 +75,11 @@ OpenCV 安装版本选择是根据 anaconda 安装 Caffe 时，依赖安装的�
 
 ```shell
 # 下载对应版本的OpenCV，并解压
+
+mkdir /opt/opencv_3rdparty
+cd /opt/opencv_3rdparty
+sed -i 's/https:\/\/raw.githubusercontent.com\/opencv\/opencv_3rdparty\/\${IPPICV_COMMIT}\/ippicv\//file:\/\/\/opt\/opencv_3rdparty\//g' ./opencv-3.3.1/3rdparty/ippicv/ippicv.cmake
+
 export ENV_OPENCV_PY=/root/.virtualenvs/OpenCV-3.3.1-py2
 cd opencv-3.3.1 && mkdir build && cd build
 # CMAKE_INSTALL_PREFIX 安装路径，这个一般指定Python模块安装路径的lib上层。当然还可以指定别的路径，注意加载环境变量。在虚拟环境中，直接是家目录。该包生成的Python模块是标准的，可以直接指定Python包安装路径。如果安装错误也没关系，可以使用软链接方式，具体方式请自行网上查找。
@@ -101,18 +109,18 @@ wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google
 tar zxvf glog-0.3.3.tar.gz
 cd glog-0.3.3
 ./configure
-make && make install
+make -j$(nproc) && make install
 # gflags
 wget https://github.com/schuhschuh/gflags/archive/master.zip
 unzip master.zip
 cd gflags-master
 mkdir build && cd build
 export CXXFLAGS="-fPIC" && cmake .. && make VERBOSE=1
-make && make install
+make -j$(nproc) && make install
 # lmdb
 git clone https://github.com/LMDB/lmdb
 cd lmdb/libraries/liblmdb
-make && make install
+make -j$(nproc) && make install
 
 # 为获得更好的CPU 性能
 yum install -y atlas-devel
@@ -140,11 +148,11 @@ ln -sv libsatlas.so.3.10 libatlas.so
 ln -sv libsatlas.so.3.10 liblapack.so
 
 cmake ..
-make all
+make -j$(nproc) all
 
 # 这里编译完成之后，会有相关的设置环境变量提示，注意保存并添加环境变量。
-make install
-make runtest
+make -j$(nproc) install
+make -j$(nproc) runtest
 
 # 设置环境变量到~/.bashrc，注意是虚拟环境的家目录。
 export CAFFE_ROOT=/opt/caffe-1.0
