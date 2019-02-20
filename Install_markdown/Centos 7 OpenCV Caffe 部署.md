@@ -6,6 +6,7 @@
 - OpenCV 3.3.1
 - Cmake-3.15.1
 - Python 2.7.5
+- virtualenv 虚拟环境
 
 ## 编译 OpenCV
 
@@ -16,7 +17,6 @@ sudo yum -y install epel-release \
             git wget unzip gcc gcc-c++ cmake3 \
             qt5-qtbase-devel \
             python python-devel python-pip \
-            python-devel numpy \
             gtk2-devel \
             libpng-devel \
             jasper-devel \
@@ -58,6 +58,7 @@ ffmpeg -version
 ### 创建虚拟环境
 
 ```shell
+pip3 install virtualenv virtualenvwrapper -i https://pypi.doubanio.com/simple/
 mkvirtualenv OpenCV-3.3.1-py2 -p python
 workon OpenCV-3.3.1-py2
 # 阿里云服务器默认选用阿里源，可取消 -i 参数
@@ -67,11 +68,13 @@ pip install numpy==1.11.0 scipy==0.17.0 matplotlib==2.1.1 scikit-image==0.13.1  
 
 ### OpenCV 编译安装
 
+OpenCV 安装版本选择是根据 anaconda 安装 Caffe 时，依赖安装的是 OpenCV-3.3.1。
+
 ```shell
 # 下载对应版本的OpenCV，并解压
 export ENV_OPENCV_PY=/root/.virtualenvs/OpenCV-3.3.1-py2
 cd opencv-3.3.1 && mkdir build && cd build
-# CMAKE_INSTALL_PREFIX 安装路径，这个一般指定Python模块安装路径的lib上层。在虚拟环境中，直接是家目录。如果安装错误也不要紧，可以使用软链接方式，具体方式请自行网上查找。
+# CMAKE_INSTALL_PREFIX 安装路径，这个一般指定Python模块安装路径的lib上层。当然还可以指定别的路径，注意加载环境变量。在虚拟环境中，直接是家目录。该包生成的Python模块是标准的，可以直接指定Python包安装路径。如果安装错误也没关系，可以使用软链接方式，具体方式请自行网上查找。
 cmake -D CMAKE_BUILD_TYPE=Release \
       -D WITH_FFMPEG=ON \
       -D CMAKE_INSTALL_PREFIX=$ENV_OPENCV_PY \
@@ -84,11 +87,75 @@ make -j$(nproc)
 make install
 ```
 
-## 编译Caffe
+## 编译 Caffe
 
 ### 安装依赖
+
+按照官网要求，安装 boost-devel 开发包时会安装依赖包 boost-1.53，该版本过低，暂不安装。
 
 ```shell
 yum install -y protobuf-devel leveldb-devel snappy-devel hdf5-devel
 
+# glog 请注意，glog不能使用最新的gflags版本（2.1）进行编译，因此在解决之前，您需要先使用glog进行构建。
+wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/google-glog/glog-0.3.3.tar.gz
+tar zxvf glog-0.3.3.tar.gz
+cd glog-0.3.3
+./configure
+make && make install
+# gflags
+wget https://github.com/schuhschuh/gflags/archive/master.zip
+unzip master.zip
+cd gflags-master
+mkdir build && cd build
+export CXXFLAGS="-fPIC" && cmake .. && make VERBOSE=1
+make && make install
+# lmdb
+git clone https://github.com/LMDB/lmdb
+cd lmdb/libraries/liblmdb
+make && make install
+
+# 为获得更好的CPU 性能
+yum install -y atlas-devel
+
+# python 包构建
+yum install -y python-devel
+
+# 使用cmake 编译
+git clone https://github.com/BVLC/caffe.git
+cd caffe
+# 修改编译配置
+cp Makefile.config.example Makefile.config
+# CPU_ONLY=1 仅仅 CPU 模式
+# BLAS := atlas  CPU更好性能
+# BLAS_INCLUDE := /usr/include/atlas
+# BLAS_LIB := /usr/lib64/atlas
+
+# Python相关路径配置
+mkdir build
+cd build
+
+# 目前只是使用cmake编译，make编译尚未验证。cmake编译时需要atlas相关的动态库，不然编译时会报错找不到Atlas_CBLAS_LIBRARY,Atlas_BLAS_LIBRARY,Atlas_LAPACK_LIBRARY 库。cmake 编译的Makefile在Caffe源码目录下$CAFFE_ROOT/cmake/Modules/FindAtlas.cmake
+ln -sv libsatlas.so.3.10 libcblas.so
+ln -sv libsatlas.so.3.10 libatlas.so
+ln -sv libsatlas.so.3.10 liblapack.so
+
+cmake ..
+make all
+
+# 这里编译完成之后，会有相关的设置环境变量提示，注意保存并添加环境变量。
+make install
+make runtest
+
+# 设置环境变量到~/.bashrc，注意是虚拟环境的家目录。
+export CAFFE_ROOT=/opt/caffe-1.0
+export PYCAFFE_ROOT=$CAFFE_ROOT/build/install/python
+export PYTHONPATH=$PYCAFFE_ROOT:$PYTHONPATH
+export PATH=$CAFFE_ROOT/build/tools:$PYCAFFE_ROOT:$CAFFE_ROOT/build/install/lib:/opt/boost_1_58_0/stage/lib:$WORKON_HOME/OpenCV-3.3.1-py2/lib:/usr/local/lib:/usr/lib64/atlas:$CAFFE_ROOT/build/install/python/caffe/_caffe.so:$PATH
+
+source ~/.bashrc
+
+# 测试caffe
+>>import caffe
+>>import os
+>>print os.path.dirname(caffe.__file__)
 ```
