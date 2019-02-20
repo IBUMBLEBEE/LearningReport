@@ -83,3 +83,12 @@ cmake -D CMAKE_BUILD_TYPE=Release \
 make -j$(nproc)
 make install
 ```
+
+## 编译Caffe
+
+### 安装依赖
+
+```shell
+yum install -y protobuf-devel leveldb-devel snappy-devel hdf5-devel
+
+```
