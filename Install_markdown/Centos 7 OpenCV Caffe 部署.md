@@ -93,6 +93,10 @@ cmake -D CMAKE_BUILD_TYPE=Release \
 
 make -j$(nproc)
 make install
+
+# 测试生成的Python 模块
+>>import cv2
+>>import os.path.dirname(os.__file__)
 ```
 
 ## 编译 Caffe
@@ -103,6 +107,8 @@ make install
 
 ```shell
 yum install -y protobuf-devel leveldb-devel snappy-devel hdf5-devel
+
+pip install protobuf -i https://pypi.doubanio.com/simple/
 
 # glog 请注意，glog不能使用最新的gflags版本（2.1）进行编译，因此在解决之前，您需要先使用glog进行构建。
 wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/google-glog/glog-0.3.3.tar.gz
@@ -161,6 +167,9 @@ export PYTHONPATH=$PYCAFFE_ROOT:$PYTHONPATH
 export PATH=$CAFFE_ROOT/build/tools:$PYCAFFE_ROOT:$CAFFE_ROOT/build/install/lib:/opt/boost_1_58_0/stage/lib:$WORKON_HOME/OpenCV-3.3.1-py2/lib:/usr/local/lib:/usr/lib64/atlas:$CAFFE_ROOT/build/install/python/caffe/_caffe.so:$PATH
 
 source ~/.bashrc
+
+echo /opt/caffe-1.0/build/lib > /etc/ld.so.conf.d/caffe.conf
+ldconfig
 
 # 测试caffe
 >>import caffe
