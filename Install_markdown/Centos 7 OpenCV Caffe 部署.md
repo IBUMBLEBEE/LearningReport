@@ -151,10 +151,10 @@ cp Makefile.config.example Makefile.config
 # BLAS := atlas  CPU更好性能
 # BLAS_INCLUDE := /usr/include/atlas
 # BLAS_LIB := /usr/lib64/atlas
+# Python库相关路径配置
+# PYTHON_INCLUDE，PYTHON_LIB
 
-# Python相关路径配置
-mkdir build
-cd build
+mkdir build && cd build
 
 # 目前只是使用cmake编译，make编译尚未验证。cmake编译时需要atlas相关的动态库，不然编译时会报错找不到Atlas_CBLAS_LIBRARY,Atlas_BLAS_LIBRARY,Atlas_LAPACK_LIBRARY 库。cmake 编译的Makefile在Caffe源码目录下$CAFFE_ROOT/cmake/Modules/FindAtlas.cmake
 ln -sv /usr/lib64/atlas/libsatlas.so.3.10 /usr/lib64/atlas/libcblas.so
