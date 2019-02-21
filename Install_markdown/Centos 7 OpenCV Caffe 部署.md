@@ -44,7 +44,9 @@ ffmpeg -version
 ### 创建虚拟环境
 
 ```shell
-pip3 install virtualenv virtualenvwrapper -i https://pypi.doubanio.com/simple/
+pip install virtualenv virtualenvwrapper -i https://pypi.doubanio.com/simple/
+
+# 这里注意使用Python2和Python3
 echo "export WORKON_HOME=/root/.virtualenvs" >> ~/.bashrc
 echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python" >> ~/.bashrc
 echo "source /usr/bin/virtualenvwrapper.sh" >> ~/.bashrc
