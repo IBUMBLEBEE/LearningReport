@@ -31,20 +31,6 @@ sudo yum -y install epel-release \
             gstreamer-plugins-base-devel
 ```
 
-### 编译安装 Boost-1.58 （Caffe 编译需要依赖这个 C++库，版本 1.55 以上）
-
-由于 Centos yum 安装是 Boost-1.53 版本，不符合要求。需要编译安装。
-
-```shell
-yum -y install gcc-c++ python-devel bzip2-devel zlib-devel
-wget https://nchc.dl.sourceforge.net/project/boost/boost/1.58.0/boost_1_58_0.zip
-unzip boost_1_58_0.zip
-cd boost_1_58_0 && ./bootstrap.sh --prefix=/usr/local/boost
-./b2
-cd tools/build && ./bootstrap.sh
-./b2 install --prefix=/usr/local/boost
-```
-
 ### 安装 ffmpeg
 
 ```shell
@@ -59,8 +45,11 @@ ffmpeg -version
 
 ```shell
 pip3 install virtualenv virtualenvwrapper -i https://pypi.doubanio.com/simple/
-mkvirtualenv OpenCV-3.3.1-py2 -p python
+echo "export WORKON_HOME=/root/.virtualenvs" >> ~/.bashrc
+echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python" >> ~/.bashrc
+echo "source /usr/bin/virtualenvwrapper.sh" >> ~/.bashrc
 source ~/.bashrc
+mkvirtualenv OpenCV-3.3.1-py2 -p python
 
 # 下次进入的时候使用
 workon OpenCV-3.3.1-py2
@@ -104,6 +93,20 @@ make install
 ### 安装依赖
 
 按照官网要求，安装 boost-devel 开发包时会安装依赖包 boost-1.53，该版本过低，暂不安装。
+
+### 编译安装 Boost-1.58 （Caffe 编译需要依赖这个 C++库，版本 1.55 以上）
+
+由于 Centos yum 安装是 Boost-1.53 版本，不符合要求。需要编译安装。
+
+```shell
+yum -y install gcc-c++ python-devel bzip2-devel zlib-devel
+wget https://nchc.dl.sourceforge.net/project/boost/boost/1.58.0/boost_1_58_0.zip
+unzip boost_1_58_0.zip
+cd boost_1_58_0 && ./bootstrap.sh --prefix=/usr/local/boost
+./b2
+cd tools/build && ./bootstrap.sh
+./b2 install --prefix=/usr/local/boost
+```
 
 ```shell
 yum install -y protobuf-devel leveldb-devel snappy-devel hdf5-devel
