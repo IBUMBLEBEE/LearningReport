@@ -69,6 +69,9 @@ OpenCV 安装版本选择是根据 anaconda 安装 Caffe 时，依赖安装的�
 
 mkdir /opt/opencv_3rdparty
 cd /opt/opencv_3rdparty
+
+# 下载编译OpenCV时需要的依赖
+
 sed -i 's/https:\/\/raw.githubusercontent.com\/opencv\/opencv_3rdparty\/\${IPPICV_COMMIT}\/ippicv\//file:\/\/\/opt\/opencv_3rdparty\//g' ./opencv-3.3.1/3rdparty/ippicv/ippicv.cmake
 
 export ENV_OPENCV_PY=/root/.virtualenvs/OpenCV-3.3.1-py2
@@ -154,9 +157,9 @@ mkdir build
 cd build
 
 # 目前只是使用cmake编译，make编译尚未验证。cmake编译时需要atlas相关的动态库，不然编译时会报错找不到Atlas_CBLAS_LIBRARY,Atlas_BLAS_LIBRARY,Atlas_LAPACK_LIBRARY 库。cmake 编译的Makefile在Caffe源码目录下$CAFFE_ROOT/cmake/Modules/FindAtlas.cmake
-ln -sv libsatlas.so.3.10 libcblas.so
-ln -sv libsatlas.so.3.10 libatlas.so
-ln -sv libsatlas.so.3.10 liblapack.so
+ln -sv /usr/lib64/atlas/libsatlas.so.3.10 /usr/lib64/atlas/libcblas.so
+ln -sv /usr/lib64/atlas/libsatlas.so.3.10 /usr/lib64/atlas/libatlas.so
+ln -sv /usr/lib64/atlas/libsatlas.so.3.10 /usr/lib64/atlas/liblapack.so
 
 cmake ..
 make -j$(nproc) all
