@@ -139,9 +139,6 @@ make -j$(nproc) && make install
 # 为获得更好的CPU 性能
 yum install -y atlas-devel
 
-# python 包构建
-yum install -y python-devel
-
 # 使用cmake 编译
 git clone https://github.com/BVLC/caffe.git
 cd caffe
@@ -156,7 +153,7 @@ cp Makefile.config.example Makefile.config
 
 mkdir build && cd build
 
-# 目前只是使用cmake编译，make编译尚未验证。cmake编译时需要atlas相关的动态库，不然编译时会报错找不到Atlas_CBLAS_LIBRARY,Atlas_BLAS_LIBRARY,Atlas_LAPACK_LIBRARY 库。cmake 编译的Makefile在Caffe源码目录下$CAFFE_ROOT/cmake/Modules/FindAtlas.cmake
+# 该文档只是使用cmake编译，make编译尚未验证。cmake编译时需要atlas相关的动态库，不然编译时会报错找不到Atlas_CBLAS_LIBRARY,Atlas_BLAS_LIBRARY,Atlas_LAPACK_LIBRARY 库。cmake 编译的Makefile在Caffe源码目录下$CAFFE_ROOT/cmake/Modules/FindAtlas.cmake
 ln -sv /usr/lib64/atlas/libsatlas.so.3.10 /usr/lib64/atlas/libcblas.so
 ln -sv /usr/lib64/atlas/libsatlas.so.3.10 /usr/lib64/atlas/libatlas.so
 ln -sv /usr/lib64/atlas/libsatlas.so.3.10 /usr/lib64/atlas/liblapack.so
