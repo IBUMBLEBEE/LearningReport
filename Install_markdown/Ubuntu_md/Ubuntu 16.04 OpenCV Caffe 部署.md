@@ -1,15 +1,15 @@
-# Ubuntu Caffe OpenCV 安装部署
+## Ubuntu Caffe OpenCV 安装部署
 
-## 前置条件
+### 前置条件
 
 - Ubuntu 16.04
 - OpenCV 3.3.1
 - Cmake-3.15.1
 - Python 2.7.12
 
-## 编译 OpenCV
+### 编译 OpenCV
 
-### 安装依赖包
+#### 安装依赖包
 
 安装 Python 以及 OpenCV 安装所需的其他库和包
 
@@ -25,7 +25,7 @@ sudo apt-get install build-essential \
              libjasper-dev
 ```
 
-### 开始安装
+#### 开始安装
 
 ```shell
 # 这里的包版本是按照项目Python包的具体版本安装的，不是必须这样的。只需要满足条件即可。
@@ -59,7 +59,7 @@ make -j$(nproc)
 make install
 ```
 
-### 测试 OpenCV Python 模块
+#### 测试 OpenCV Python 模块
 
 ```python
 import cv2
@@ -67,9 +67,9 @@ print cv2.__version__
 3.3.1
 ```
 
-## 编译 Caffe
+### 编译 Caffe
 
-### 通用依赖
+#### 通用依赖
 
 ```shell
 sudo apt-get update && apt-get install -y --no-install-recommends \
@@ -95,7 +95,7 @@ sudo apt-get update && apt-get install -y --no-install-recommends \
         python-scipy
 ```
 
-### 编译
+#### 编译
 
 ```shell
 # 下载源码 解压

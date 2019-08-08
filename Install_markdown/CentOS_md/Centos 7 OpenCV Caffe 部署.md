@@ -1,6 +1,6 @@
-# Centos Caffe 部署
+## Centos Caffe 部署
 
-## 前置条件
+### 前置条件
 
 - Centos 7
 - OpenCV 3.3.1
@@ -8,9 +8,9 @@
 - Python 2.7.5
 - virtualenv 虚拟环境
 
-## 编译 OpenCV
+### 编译 OpenCV
 
-### 安装依赖包
+#### 安装依赖包
 
 ```shell
 sudo yum -y install epel-release \
@@ -31,7 +31,7 @@ sudo yum -y install epel-release \
             gstreamer-plugins-base-devel
 ```
 
-### 安装 ffmpeg
+#### 安装 ffmpeg
 
 ```shell
 yum install -y epel-release
@@ -41,7 +41,7 @@ yum install -y ffmpeg ffmpeg-devel
 ffmpeg -version
 ```
 
-### 创建虚拟环境
+#### 创建虚拟环境
 
 ```shell
 pip install virtualenv virtualenvwrapper -i https://pypi.doubanio.com/simple/
@@ -60,7 +60,7 @@ pip install cmake -i https://pypi.doubanio.com/simple/
 pip install numpy==1.11.0 scipy==0.17.0 matplotlib==2.1.1 scikit-image==0.13.1  ipython==5.5 scikit-learn dlib -i https://pypi.doubanio.com/simple/
 ```
 
-### OpenCV 编译安装
+#### OpenCV 编译安装
 
 OpenCV 安装版本选择是根据 anaconda 安装 Caffe 时，依赖安装的是 OpenCV-3.3.1。
 
@@ -93,13 +93,13 @@ make install
 >>import os.path.dirname(os.__file__)
 ```
 
-## 编译 Caffe
+### 编译 Caffe
 
-### 安装依赖
+#### 安装依赖
 
 按照官网要求，安装 boost-devel 开发包时会安装依赖包 boost-1.53，该版本过低，暂不安装。
 
-### 编译安装 Boost-1.58 （Caffe 编译需要依赖这个 C++库，版本 1.55 以上）
+#### 编译安装 Boost-1.58 （Caffe 编译需要依赖这个 C++库，版本 1.55 以上）
 
 由于 Centos yum 安装是 Boost-1.53 版本，不符合要求。需要编译安装。
 
